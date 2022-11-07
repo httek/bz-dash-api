@@ -2,20 +2,30 @@
 
 namespace App\Http\Controllers\Setting;
 
-use App\Services\RoleService;
-use App\Http\Requests\Role\Store;
-use App\Http\Requests\Role\Update;
+use App\Http\Requests\Permission\Store;
+use App\Http\Requests\Permission\Update;
+use App\Services\PermissionService;
 use App\Http\Controllers\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
-class RoleController extends Controller
+class PermissionController extends Controller
 {
+    /**
+     * @return JsonResponse
+     */
+    public function tree()
+    {
+        $items = PermissionService::tree();
+
+        return success($items);
+    }
+
     /**
      * @return JsonResponse
      */
     public function index()
     {
-        $items = RoleService::items();
+        $items = PermissionService::items();
 
         return success($items);
     }
@@ -26,7 +36,7 @@ class RoleController extends Controller
      */
     public function show(int $id)
     {
-        $item = RoleService::find($id);
+        $item = PermissionService::find($id);
 
         return $item ? success($item) : fail('Not found.');
     }
@@ -37,9 +47,9 @@ class RoleController extends Controller
      */
     public function store(Store $request)
     {
-        $role = RoleService::store($request->validated());
+        $item = PermissionService::store($request->validated());
 
-        return $role ? success($role) : fail();
+        return $item ? success($item) : fail();
     }
 
     /**
@@ -48,9 +58,9 @@ class RoleController extends Controller
      */
     public function update(Update $request, int $id)
     {
-        $role = RoleService::update($request->validated(), compact('id'));
+        $item = PermissionService::update($request->validated(), compact('id'));
 
-        return $role ? success($role) : fail();
+        return $item ? success($item) : fail();
     }
 
     /**
@@ -59,6 +69,6 @@ class RoleController extends Controller
      */
     public function destroy(int $id)
     {
-        return RoleService::destroy($id) ? success() : fail();
+        return PermissionService::destroy($id) ? success() : fail();
     }
 }

@@ -2,7 +2,7 @@
 
 namespace App\Providers;
 
-use App\Services\AccountService;
+use App\Services\AdminService;
 use App\Services\TokenService;
 use Illuminate\Http\Request;
 use Illuminate\Support\ServiceProvider;
@@ -25,7 +25,7 @@ class AuthServiceProvider extends ServiceProvider
             if ($token = $request->bearerToken() ?: $request->input('token')) {
                 $validated = TokenService::validate($token);
                 if (!$validated->fails()) {
-                    return AccountService::find(
+                    return AdminService::find(
                         (int) $validated->getToken()->claims()->get('jti')
                     );
                 }

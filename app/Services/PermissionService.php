@@ -2,23 +2,23 @@
 
 namespace App\Services;
 
-use App\Models\Role;
-use Illuminate\Database\Eloquent\Collection;
+use App\Models\Permission;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Collection;
 
-class RoleService extends Service
+class PermissionService extends Service
 {
     /**
      * @var Model
      */
-    protected static $model = Role::class;
+    protected static $model = Permission::class;
 
     /**
      * @param int $id
      * @param array $where
      * @return Role|null
      */
-    public static function find(int $id, array $where = []): ?Role
+    public static function find(int $id, array $where = []): ?Permission
     {
         return static::model()->where($where)->find($id);
     }
@@ -27,7 +27,7 @@ class RoleService extends Service
      * @param array $condition
      * @return Role|null
      */
-    public static function findByCondition(array $condition = []): ?Role
+    public static function findByCondition(array $condition = []): ?Permission
     {
         return static::model()->where($condition)->first();
     }
@@ -68,7 +68,7 @@ class RoleService extends Service
      * @param array $where
      * @return Role|null
      */
-    public static function update(array $attributes, array $where = []): ?Role
+    public static function update(array $attributes, array $where = []): ?Permission
     {
         if (! $item = self::findByCondition($where)) {
             return null;
@@ -77,5 +77,18 @@ class RoleService extends Service
         $item->update($attributes);
 
         return $item;
+    }
+
+    /**
+     * @return array
+     */
+    public static function tree()
+    {
+        return static::model()
+            ->linkable()
+            ->latest('sequence')
+            ->whereNull('parent')
+            ->with('children')
+            ->get();
     }
 }

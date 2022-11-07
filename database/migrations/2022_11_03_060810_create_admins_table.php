@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('admins', function (Blueprint $table) {
             $table->id();
-            $table->boolean('type')->default(false)->index();
+            $table->boolean('type')->default(1)->index();
             $table->char('name', 60)->nullable();
             $table->string('avatar', 400)->nullable();
             $table->char('mobile', 15)->unique();

@@ -4,7 +4,7 @@ namespace App\Http\Requests\Role;
 
 use App\Http\Requests\Request;
 
-class Update extends Request
+class Store extends Request
 {
     /**
      * @return string[]
@@ -12,7 +12,7 @@ class Update extends Request
     public function rules(): array
     {
         return [
-            'name' => 'min:2',
+            'name' => 'required|min:2',
             'parent' => 'integer|exists:roles,id',
             'status' => 'integer|in:0,1',
             'remarks' => 'string|max:60'

@@ -4,7 +4,7 @@ namespace App\Services;
 
 use App\Models\Admin;
 
-class AccountService extends Service
+class AdminService extends Service
 {
     /**
      * @param int $id
