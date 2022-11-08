@@ -19,8 +19,8 @@ class Controller extends BaseController
         }
 
         return [
-            $request->get('page', 1),
-            $request->get('size', 15)
+            (int) $request->get('page', 1),
+            (int) $request->get('size', 15)
         ];
     }
 
