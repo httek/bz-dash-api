@@ -18,7 +18,7 @@ $router->get('/', function () use ($router) {
 });
 
 $router->group(['prefix' => 'auth'], function () use ($router) {
-    $router->get('login', 'AuthController@login');
+    $router->post('login', 'AuthController@login');
     $router->group(['middleware' => 'auth'], function () use ($router) {
         $router->get('permissions', 'AuthController@permissions');
     });
