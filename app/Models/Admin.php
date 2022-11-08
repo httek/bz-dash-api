@@ -45,4 +45,20 @@ class Admin extends Model implements AuthenticatableContract, AuthorizableContra
     {
         $this->attributes['password'] = Hash::make($password);
     }
+
+    /**
+     * @return bool
+     */
+    public function isDisabled(): bool
+    {
+        return $this->getAttributeValue('status') == 0;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isSuper()
+    {
+        return $this->getAttributeValue('type') == 0;
+    }
 }

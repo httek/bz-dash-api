@@ -2,7 +2,7 @@
 
 namespace App\Services;
 
-use App\Models\User;
+use App\Models\Admin;
 use App\Types\JsonWebTokenValidated;
 use DateTimeImmutable;
 use Illuminate\Support\Facades\Log;
@@ -24,7 +24,7 @@ class TokenService extends Service
      * @param int $ttl
      * @return string|null
      */
-    public static function issue(User $user, int $ttl = 60): ?string
+    public static function issue(Admin $user, int $ttl = 60): ?string
     {
         $facade = new JwtFacade();
         $token = $facade->issue(

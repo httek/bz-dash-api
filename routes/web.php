@@ -17,6 +17,13 @@ $router->get('/', function () use ($router) {
     return $router->app->version();
 });
 
+$router->group(['prefix' => 'auth'], function () use ($router) {
+    $router->get('login', 'AuthController@login');
+    $router->group(['middleware' => 'auth'], function () use ($router) {
+        $router->get('permissions', 'AuthController@permissions');
+    });
+});
+
 $router->group(['middleware' => null], function () use ($router) {
     $router->group(['prefix' => 'setting', 'namespace' => 'Setting'], function () use ($router) {
         $router->group(['prefix' => 'roles'], function () use ($router) {
@@ -44,5 +51,4 @@ $router->group(['middleware' => null], function () use ($router) {
             $router->delete('{id:\d+}', 'PermissionController@destroy');
         });
     });
-
 });

@@ -39,6 +39,10 @@ class Authenticate
             return error('Unauthorized', 4010);
         }
 
+        if ($this->auth->guard()->user()->isDisabled()) {
+            return error('Blocked', 4011);
+        }
+
         return $next($request);
     }
 }

@@ -2,12 +2,29 @@
 
 namespace App\Providers;
 
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
 {
+    public function boot()
+    {
+        if (env('SQL_DEBUG', false)) {
+            $no = 0;
+            DB::listen(function($query) use (&$no) {
+                Log::withContext([
+                    "sql-{$no}" => $query->sql,
+                    "sql-{$no}-bindings" => join(',', $query->bindings ?? []),
+                    "sql-{$no}-time" => $query->time
+                ]);
+
+                $no++;
+            });
+        }
+    }
+
     /**
      * Register any application services.
      *

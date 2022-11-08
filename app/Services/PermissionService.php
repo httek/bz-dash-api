@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Models\Admin;
 use App\Models\Permission;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Collection;
@@ -90,5 +91,26 @@ class PermissionService extends Service
             ->whereNull('parent')
             ->with('children')
             ->get();
+    }
+
+
+    /**
+     * @param Admin $admin
+     * @return \Illuminate\Support\Collection
+     */
+    public static function getPoolByAdmin(Admin $admin)
+    {
+        $model = static::model();
+        if ($admin->isSuper()) {
+            return $model->pluck('id');
+        }
+
+        if (! $admin->role) {
+            return collect();
+        }
+
+        $pIds = $admin->role->permissions->pluck('id');
+
+        return $model->whereIn('id', $pIds)->pluck('id');
     }
 }
