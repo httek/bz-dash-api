@@ -24,7 +24,7 @@ $router->group(['prefix' => 'auth'], function () use ($router) {
     });
 });
 
-$router->group(['middleware' => null], function () use ($router) {
+$router->group(['middleware' => 'auth'], function () use ($router) {
     $router->group(['prefix' => 'setting', 'namespace' => 'Setting'], function () use ($router) {
         $router->group(['prefix' => 'roles'], function () use ($router) {
             $router->get('', 'RoleController@index');
