@@ -54,10 +54,6 @@ class Handler extends ExceptionHandler
             return fail($exception->validator->errors()->first() ?? $exception->getMessage(), 4220);
         }
 
-        if ($exception instanceof NotFoundHttpException) {
-            return response()->json([], 404);
-        }
-
         return parent::render($request, $exception);
     }
 }
