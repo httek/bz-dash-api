@@ -22,6 +22,7 @@ return new class extends Migration
             $table->string('password', 200)->nullable();
             $table->boolean('status')->default(true)->index();
             $table->timestamp('login_at')->nullable();
+            $table->unsignedBigInteger('role_id')->nullable()->index();
             $table->timestamps();
             $table->softDeletes();
         });
