@@ -20,7 +20,7 @@ $router->get('/', function () use ($router) {
 $router->group(['prefix' => 'auth'], function () use ($router) {
     $router->post('login', 'AuthController@login');
     $router->group(['middleware' => 'auth'], function () use ($router) {
-        $router->get('permissions', 'AuthController@permissions');
+        $router->get('meta', 'AuthController@meta');
     });
 });
 

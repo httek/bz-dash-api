@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Admin;
 use App\Services\AdminService;
 use App\Services\PermissionService;
 use App\Services\TokenService;
@@ -32,15 +31,17 @@ class AuthController extends Controller
         return success(compact('token', 'profile'));
     }
 
+
     /**
      * @param Request $request
      * @return \Symfony\Component\HttpFoundation\JsonResponse
      */
-    public function permissions(Request $request)
+    public function meta(Request $request)
     {
+        $profile = $request->user();
         $tree = PermissionService::tree();
-        $pool = PermissionService::getPoolByAdmin($request->user());
+        $pool = PermissionService::getPoolByAdmin($profile);
 
-        return success(compact('pool', 'tree'));
+        return success(compact('profile', 'tree', 'pool'));
     }
 }
