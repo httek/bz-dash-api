@@ -83,7 +83,7 @@ class PermissionService extends Service
     /**
      * @return array
      */
-    public static function tree()
+    public static function menus()
     {
         return static::model()
             ->linkable()
@@ -98,11 +98,11 @@ class PermissionService extends Service
      * @param Admin $admin
      * @return \Illuminate\Support\Collection
      */
-    public static function getPoolByAdmin(Admin $admin)
+    public static function getPermissionIdsByAdmin(Admin $admin)
     {
         $model = static::model();
         if ($admin->isSuper()) {
-            return $model->pluck('id');
+            return $model->pluck('name');
         }
 
         if (! $admin->role) {
@@ -111,6 +111,52 @@ class PermissionService extends Service
 
         $pIds = $admin->role->permissions->pluck('id');
 
-        return $model->whereIn('id', $pIds)->pluck('id');
+        return $model->whereIn('id', $pIds)->pluck('name');
+    }
+
+    /**
+     * @param Admin $admin
+     * @return array
+     */
+    public static function getAdminMenus(Admin $admin)
+    {
+        $allMenus = static::model()
+        ->linkable()
+        ->latest('sequence')
+        ->whereNull('parent')
+        ->with('child')
+        ->get();
+
+        if ($admin->isSuper()) {
+            return $allMenus;
+        }
+
+        $permissions = self::getPermissionIdsByAdmin($admin);
+        return $allMenus->map(function ($item) use ($permissions) {
+            return self::checkPermission($item, $permissions);
+        })->filter()->values();
+    }
+
+    /**
+     * @param Permission $permission
+     * @param \Illuminate\Support\Collection $perms
+     * @return void|null
+     */
+    public static function checkPermission(Permission $permission, \Illuminate\Support\Collection $perms)
+    {
+        if (! $perms->contains($permission->name)) {
+            return false;
+        }
+
+        $children = [];
+        foreach ($permission->child as $child) {
+            if ($child = self::checkPermission($child, $perms)) {
+                $children[] = $child;
+            }
+        }
+
+        $permission->setRelation('child', new Collection($children));
+
+        return $permission;
     }
 }

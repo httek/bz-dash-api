@@ -15,7 +15,7 @@ class PermissionController extends Controller
      */
     public function tree()
     {
-        $items = PermissionService::tree();
+        $items = PermissionService::menus();
 
         return success($items);
     }

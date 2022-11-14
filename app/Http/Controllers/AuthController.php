@@ -38,10 +38,12 @@ class AuthController extends Controller
      */
     public function meta(Request $request)
     {
-        $profile = $request->user();
-        $tree = PermissionService::tree();
-        $pool = PermissionService::getPoolByAdmin($profile);
+        $admin = $request->user();
+        $menus = PermissionService::getAdminMenus($admin);
+        $permissions = PermissionService::getPermissionIdsByAdmin($admin);
 
-        return success(compact('profile', 'tree', 'pool'));
+        return success(
+            compact('admin', 'menus', 'permissions')
+        );
     }
 }

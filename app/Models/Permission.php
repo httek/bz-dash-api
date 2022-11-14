@@ -62,6 +62,24 @@ class Permission extends Model
         return $this->grandChildren()->with('children');
     }
 
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function grandChild()
+    {
+        return $this->hasMany(self::class,'parent')
+            ->where('type', '<', 2);
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function child()
+    {
+        return $this->grandChild()->with('child');
+    }
+
     /**
      * @param $relations
      * @return void
