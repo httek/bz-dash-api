@@ -20,7 +20,7 @@ class Controller extends BaseController
 
         return [
             (int) $request->get('page', 1),
-            (int) $request->get('size', 15)
+            (int) $request->get('size', 10)
         ];
     }
 

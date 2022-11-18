@@ -89,7 +89,7 @@ class RoleService extends Service
      * @param array $sort
      * @return LengthAwarePaginator
      */
-    public static function itemsWithPaginate(int $page = 1, int $size = 15, array $where = [], array $sort = []): LengthAwarePaginator
+    public static function itemsWithPaginate(int $page = 1, int $size = 10, array $where = [], array $sort = []): LengthAwarePaginator
     {
         $query = static::model()->with('permissions')->where($where);
         foreach ($sort as $filed => $order) {
