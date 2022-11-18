@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Setting;
 
+use Illuminate\Http\Request;
 use App\Services\RoleService;
 use App\Http\Requests\Role\Store;
 use App\Http\Requests\Role\Update;
@@ -13,11 +14,17 @@ class RoleController extends Controller
     /**
      * @return JsonResponse
      */
-    public function index()
+    public function index(Request $request)
     {
-        $items = RoleService::items();
+        $where = ['status' => $request->input('status', 1)];
+        if ($name = $request->input('name')) {
+            $where[] = ['name', 'LIKE', "%{$name}%"];
+        }
 
-        return success($items);
+        $params = [...$this->getPagingParams(), $where];
+        $items = RoleService::itemsWithPaginate(...$params);
+
+        return $this->simplePaging($items);
     }
 
     /**

@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Models\Role;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Pagination\LengthAwarePaginator;
 
 class RoleService extends Service
 {
@@ -77,5 +78,25 @@ class RoleService extends Service
         $item->update($attributes);
 
         return $item;
+    }
+
+    // itemsWithPaginate
+
+    /**
+     * @param int $page
+     * @param int $size
+     * @param array $where
+     * @param array $sort
+     * @return LengthAwarePaginator
+     */
+    public static function itemsWithPaginate(int $page = 1, int $size = 15, array $where = [], array $sort = []): LengthAwarePaginator
+    {
+        $query = static::model()->with('permissions')->where($where);
+        foreach ($sort as $filed => $order) {
+            $ot = $order == 'desc' ? 'latest' : 'oldest';
+            $query->{$ot}($filed);
+        }
+
+        return $query->paginate($size, '*', 'page', $page);
     }
 }
