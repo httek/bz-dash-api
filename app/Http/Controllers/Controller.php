@@ -33,7 +33,7 @@ class Controller extends BaseController
         $result = [
             'data' => $paginator->items(),
             'size' => $paginator->perPage(),
-            'total' => $paginator->count(),
+            'total' => $paginator->total(),
             'current' => $paginator->currentPage(),
             'last_page' => $paginator->lastPage(),
             'has_next' => $paginator->count() && $paginator->currentPage() < $paginator->lastPage()
