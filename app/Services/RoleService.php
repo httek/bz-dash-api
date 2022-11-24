@@ -71,7 +71,7 @@ class RoleService extends Service
      */
     public static function update(array $attributes, array $where = []): ?Role
     {
-        if (! $item = self::findByCondition($where)) {
+        if (!$item = self::findByCondition($where)) {
             return null;
         }
 

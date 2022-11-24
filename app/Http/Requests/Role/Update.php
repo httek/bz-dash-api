@@ -13,7 +13,7 @@ class Update extends Request
     {
         return [
             'name' => 'min:2',
-            'parent' => 'integer|exists:roles,id',
+            'parent' => 'nullable|integer|exists:roles,id',
             'status' => 'integer|in:0,1',
             'remarks' => 'string|max:60'
         ];
