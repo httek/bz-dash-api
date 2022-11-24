@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Setting;
 
+use App\Models\AdminRole;
 use App\Models\RolePermission;
 use Illuminate\Http\Request;
 use App\Services\RoleService;
@@ -64,7 +65,9 @@ class RoleController extends Controller
     public function update(Update $request, int $id)
     {
         $role = RoleService::update($request->validated(), compact('id'));
+        if ($role && ($permissions = $request->input('permissions'))) {
 
+        }
         return $role ? success($role) : fail();
     }
 
@@ -74,6 +77,11 @@ class RoleController extends Controller
      */
     public function destroy(int $id)
     {
-        return RoleService::destroy($id) ? success() : fail();
+        if (RoleService::destroy($id)) {
+            AdminRole::where('role_id', $id)->delete();
+            return success();
+        }
+
+        return fail();
     }
 }
