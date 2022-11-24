@@ -66,8 +66,14 @@ class RoleController extends Controller
     {
         $role = RoleService::update($request->validated(), compact('id'));
         if ($role && ($permissions = $request->input('permissions'))) {
-
+            $insert = [];
+            foreach ($permissions as $pId) {
+                $insert[] = ['role_id' => $role->id, 'permission_id' => $pId];
+            }
+            RolePermission::where('role_id', $id)->delete();
+            RolePermission::insert($insert);
         }
+        
         return $role ? success($role) : fail();
     }
 
