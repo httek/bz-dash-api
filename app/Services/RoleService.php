@@ -57,7 +57,7 @@ class RoleService extends Service
     /**
      * @return Collection
      */
-    public static function store(array $attributes): ?Permission
+    public static function store(array $attributes): ?Role
     {
         $item = static::model()->create($attributes);
 
