@@ -47,7 +47,7 @@ class RoleController extends Controller
     public function store(Store $request)
     {
         $role = RoleService::store($request->validated());
-        if ($role && ($permissions = $request->input('permissions'))) {
+        if ($role && ($permissions = $request->input('perms'))) {
             $insert = [];
             foreach ($permissions as $pId) {
                 $insert[] = ['role_id' => $role->id, 'permission_id' => $pId];
@@ -65,7 +65,7 @@ class RoleController extends Controller
     public function update(Update $request, int $id)
     {
         $role = RoleService::update($request->validated(), compact('id'));
-        if ($role && ($permissions = $request->input('permissions'))) {
+        if ($role && ($permissions = $request->input('perms'))) {
             $insert = [];
             foreach ($permissions as $pId) {
                 $insert[] = ['role_id' => $role->id, 'permission_id' => $pId];
