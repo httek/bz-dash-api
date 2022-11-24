@@ -73,7 +73,7 @@ class RoleController extends Controller
             RolePermission::where('role_id', $id)->delete();
             RolePermission::insert($insert);
         }
-        
+
         return $role ? success($role) : fail();
     }
 
@@ -84,7 +84,10 @@ class RoleController extends Controller
     public function destroy(int $id)
     {
         if (RoleService::destroy($id)) {
+            // 清空账号与角色关联信息
             AdminRole::where('role_id', $id)->delete();
+            // 清空角色与权限关联信息
+            RolePermission::where('role_id', $id)->delete();
             return success();
         }
 
