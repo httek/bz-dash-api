@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Setting;
 
+use App\Models\RolePermission;
 use Illuminate\Http\Request;
 use App\Services\RoleService;
 use App\Http\Requests\Role\Store;
@@ -45,6 +46,13 @@ class RoleController extends Controller
     public function store(Store $request)
     {
         $role = RoleService::store($request->validated());
+        if ($role && ($permissions = $request->input('permissions'))) {
+            $insert = [];
+            foreach ($permissions as $pId) {
+                $insert[] = ['role_id' => $role->id, 'permission_id' => $pId];
+            }
+            RolePermission::insert($insert);
+        }
 
         return $role ? success($role) : fail();
     }
